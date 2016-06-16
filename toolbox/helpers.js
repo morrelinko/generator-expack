@@ -10,7 +10,7 @@ exports.header = function (title) {
 };
 
 exports.readTpl = function (generator, file, context) {
-  return ejs.render(generator.read(file), contexta);
+  return ejs.render(generator.read(file), context);
 };
 
 exports.generateToken = function (bytes) {
@@ -27,7 +27,7 @@ exports.isSQLDatabase = function (db) {
   return ['mysql'].indexOf(db) !== -1;
 };
 
-exports.ensureExpack = function (generator) {
+exports.ensureExpack = function (generator, program) {
   if (!generator.fs.exists(generator.destinationPath('package.json'))
     && !generator.fs.exists(generator.destinationPath('.project'))) {
     generator.log(chalk.red([
