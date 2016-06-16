@@ -1,0 +1,19 @@
+'use strict';
+
+let path = require('path');
+let _ = require('lodash');
+let config = require('./server/config');
+
+let db = _.extend(config.get('database.main'), {
+  migrations: {
+    tableName: 'migrations',
+    directory: path.resolve(__dirname, 'server/database/migrations')
+  },
+  seeds: {
+    directory: path.resolve(__dirname, 'server/database/seeds')
+  }
+});
+
+['production', 'tests', 'staging', 'development'].forEach(function (environment) {
+  exports[environment] = db;
+});

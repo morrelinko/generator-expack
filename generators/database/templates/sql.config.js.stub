@@ -1,0 +1,10 @@
+{
+  client: "<%= database %>",
+  connection: {
+    host: process.env.DB_<%= identifier %>_HOST || '127.0.0.1',
+    user: process.env.DB_<%= identifier %>_USERNAME || 'root',
+    password: process.env.DB_<%= identifier %>_PASSWORD || '',
+    database: process.env.DB_<%= identifier %>_DATABASE,
+    charset: process.env.DB_<%= identifier %>_CHARSET || 'utf8'
+  }
+}

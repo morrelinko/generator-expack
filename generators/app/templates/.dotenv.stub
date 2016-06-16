@@ -1,0 +1,4 @@
+NODE_ENV=development
+APP_TITLE=<%= title %>
+APP_DEBUG=true
+APP_TOKEN=<%= token %>
