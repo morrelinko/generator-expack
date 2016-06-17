@@ -38,8 +38,9 @@ module.exports = generators.Base.extend({
     if (this.answers.confirm) {
       let paths = del.sync([
         this.destinationPath('*'),
-        this.destinationPath('.*')
-      ], { force: false });
+        this.destinationPath('.*'),
+        '!' + this.destinationPath('node_modules')
+      ], {force: false});
 
       paths.forEach(path => this.log(chalk.green('Deleted: ') + path));
       done();
