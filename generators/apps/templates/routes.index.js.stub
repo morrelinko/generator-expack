@@ -1,0 +1,15 @@
+'use strict';
+
+const express = require('express');
+const rp = require('routeplus');
+const handlers = require('../handlers/web');
+
+module.exports = function <%= name %>Routes(app) {
+    const router = rp.adapt(express.Router());
+
+    router.get('/<%= name %>',
+        rp.builder(handlers.module.handle).build())
+      .as('<%= name %>');
+
+    app.use(router);
+};

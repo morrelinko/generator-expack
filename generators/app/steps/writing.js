@@ -5,6 +5,7 @@ let ejs = require('ejs');
 let Promise = require('bluebird');
 let _ = require('lodash');
 let ast = require('ast-query');
+let del = require('del');
 let glob = require('glob');
 
 module.exports = function (program) {
@@ -13,9 +14,6 @@ module.exports = function (program) {
     this.directory('app/bin', 'bin');
     this.directory('app/client', 'client');
     this.directory('app/server', 'server');
-
-    // Remove all .keep files
-    this.fs.delete(path.resolve(this.destinationPath('**/.keep')));
 
     // Create .gitignore
     this.fs.copy(
@@ -43,9 +41,5 @@ module.exports = function (program) {
     this.pck.dependencies = deps.dependencies;
     this.pck.devDependencies = deps.devDependencies;
     this.fs.writeJSON(this.destinationPath('package.json'), this.pck);
-
-    return Promise.promisify(this.fs.commit, {
-      context: this.fs
-    })();
   };
 };

@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ config.get('app.title') }}</title>
+</head>
+<body>
+{% block template_content %}{% endblock %}
+</body>
+</html>

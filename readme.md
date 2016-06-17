@@ -11,11 +11,16 @@ Full stack application generator
 
 ## TODO
 
-### expack:database generator
+##### expack:database generator
 
 - Use uglifyjs to beautify config after update.
-- Add support for mongodb
+- Add support for mongodb.
+- Update package.json with selected database dependencies.
+- Generate knexfile.js if a relation db is selected.
+
+##### Generators
+
 - Add generator `expack:controller` (generate controller)
 - Add generator `expack:model` (genereate model)
 - Add generator `expack:validator` (generate validation middleware)
-- Add generator `expack:auth`
+- Add generator `expack:auth` scaffold user authentication (passport)
