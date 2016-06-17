@@ -1,5 +1,6 @@
 'use strict';
 
+let chalk = require('chalk');
 let ejs = require('ejs');
 let Promise = require('bluebird');
 let crypto = require('crypto');
