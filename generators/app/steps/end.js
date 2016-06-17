@@ -15,4 +15,4 @@ module.exports = function (program) {
       `To start your application, run: ${chalk.cyan('npm start')}`
     ].join('\n'));
   };
-}
+};
