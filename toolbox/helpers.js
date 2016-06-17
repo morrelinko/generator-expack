@@ -24,7 +24,7 @@ exports.wait = function (delay) {
   });
 };
 
-exports.isSQLDatabase = function (db) {
+exports.isRelationalDB = function (db) {
   return ['mysql'].indexOf(db) !== -1;
 };
 

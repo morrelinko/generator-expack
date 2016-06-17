@@ -12,7 +12,7 @@ module.exports = function (program) {
     let dotenvTpl = null;
     let dbconfTpl = null;
 
-    if (program.helpers.isSQLDatabase(this.answers.database)) {
+    if (program.helpers.isRelationalDB(this.answers.database)) {
       dotenvTpl = this.templatePath('sql.dotenv.stub');
       dbconfTpl = this.templatePath('sql.config.stub');
     }
@@ -41,7 +41,6 @@ module.exports = function (program) {
       .key('database')
       .key(identifier)
       .value(dbconfTpl);
-
     this.fs.write(this.destinationPath('server/config/database.js'), tree.toString());
 
     // -- Update .project config
@@ -49,5 +48,7 @@ module.exports = function (program) {
       identifier: identifier,
       database: database
     });
+
+    // TODO: Create knexfile.js if 'database' is relational db
   };
 };

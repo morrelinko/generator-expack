@@ -36,16 +36,8 @@ module.exports = function (program) {
         token: program.helpers.generateToken()
       });
 
-    // Setup Database
-    if (program.helpers.isSQLDatabase(this.answers.database)) {
-      // Create knexfile.js
-      this.fs.copy(this.templatePath('knexfile.js.stub'), this.destinationPath('knexfile.js'));
-    }
-
     // Update package.json
-    let deps = JSON.parse(ejs.render(this.read(this.templatePath('dependencies.json.stub')), {
-      isSQLDatabase: program.helpers.isSQLDatabase(this.answers.database)
-    }));
+    let deps = JSON.parse(this.read(this.templatePath('dependencies.json.stub')));
 
     this.pck.name = this.appname;
     this.pck.dependencies = deps.dependencies;
