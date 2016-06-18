@@ -1,0 +1,2 @@
+APP_<%= name.toUpperCase() %>_HOST=<%= host %>
+APP_<%= name.toUpperCase() %>_PORT=<%= port %>

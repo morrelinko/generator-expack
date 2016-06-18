@@ -1,7 +1,9 @@
 'use strict';
 
-var convict = require('convict');
-var _ = require('lodash');
+const fs = require('fs');
+const path = require('path');
+const convict = require('convict');
+const _ = require('lodash');
 
 var config = convict({
   env: {
@@ -20,8 +22,8 @@ config.consts.ENV_STAGING = 'staging';
 
 // Load config files...
 fs.readdir(__dirname, (err, files) => {
-  for (let i = 0; i < items.length; i++) {
-    config.load(require(files[i]));
+  for (let i = 0, l = files.length; i < l; i++) {
+    config.load(require('./' + files[i]));
   }
 });
 

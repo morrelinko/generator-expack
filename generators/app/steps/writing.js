@@ -4,7 +4,6 @@ let path = require('path');
 let ejs = require('ejs');
 let Promise = require('bluebird');
 let _ = require('lodash');
-let ast = require('ast-query');
 let del = require('del');
 let glob = require('glob');
 

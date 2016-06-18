@@ -1,0 +1,70 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const http = require('http');
+const util = require('util');
+const path = require('path');
+const express = require('express');
+const chalk = require('chalk');
+const minimist = require('minimist');
+const dotenv = require('dotenv');
+const config = require('../server/config');
+const apps = require('../server/apps');
+
+dotenv.config({
+  path: path.resolve(__dirname, '../.dotenv')
+});
+
+let app = express();
+let server = http.createServer(app);
+let argv = minimist(process.argv.slice(2));
+
+fs.readFile(path.resolve(__dirname, '../.project'), (err, data) => {
+  let dotp = JSON.parse(data.toString());
+  let subapp = argv._[0];
+
+  if (util.isNullOrUndefined(subapp)) {
+    console.log([
+      `${chalk.red(`[Error starting app]`)} No app specified.`,
+      `Run using ${chalk.cyan('node bin/serve [appname]')}`
+    ].join());
+    process.exit(1);
+  }
+
+  if (!(subapp in dotp.apps)) {
+    console.log([
+      `${chalk.red('[Error starting app]')}`,
+      `Cannot find app "${chalk.cyan(subapp)}".`
+    ].join());
+    process.exit(1);
+  }
+
+  let cfg = dotp[subapp];
+
+  let host = config.get(`app.apps.${subapp}.host`);
+  let port = config.get(`app.apps.${subapp}.port`);
+
+  // Mount main app
+  app.use(apps[subapp]());
+
+  // Mount apps mounted on main app
+  for (let i in dotp.apps) {
+    if (dotp.apps.hasOwnProperty(i)) {
+      let appcfg = dotp.apps[i];
+      if (appcfg.standalone === false && appcfg.mount_app === subapp) {
+        app.use(appcfg.mount_path, apps[appcfg.name]());
+      }
+    }
+  }
+
+  server.listen(port, host, function () {
+    console.log([
+      `\n${config.get('app.title')} ${subapp.toUpperCase()}`,
+      "==============================================",
+      "Mode: " + config.get('env'),
+      "Host: " + host,
+      "Port: " + port,
+      "----------------------------------------------"
+    ].join("\n"));
+  });
+});

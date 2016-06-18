@@ -1,0 +1,4 @@
+{
+  host: process.env.APP_<%= name.toUpperCase() %>_HOST || '127.0.0.1',
+  port: process.env.APP_<%= name.toUpperCase() %>_PORT
+}

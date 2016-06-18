@@ -1,7 +1,5 @@
 'use strict';
 
-let ast = require('ast-query');
-
 module.exports = function (program) {
   return function () {
     let config = program.config(this);
@@ -36,12 +34,14 @@ module.exports = function (program) {
       identifier: identifier.toUpperCase()
     });
 
-    let tree = ast(dbconf);
-    tree.assignment('module.exports').value()
-      .key('database')
-      .key(identifier)
-      .value(dbconfTpl);
-    this.fs.write(this.destinationPath('server/config/database.js'), tree.toString());
+    let dbconfUpdate = program.helpers.ast(dbconf, function (tree) {
+      tree.assignment('module.exports').value()
+        .key('database')
+        .key(identifier)
+        .value(dbconfTpl);
+    }.bind(this));
+
+    this.fs.write(this.destinationPath('server/config/database.js'), dbconfgUpdate);
 
     // -- Update .project config
     config.set(`database:${this.answers.database}`, {

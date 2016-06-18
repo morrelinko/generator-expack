@@ -1,10 +1,38 @@
 'use strict';
 
-let chalk = require('chalk');
-let ejs = require('ejs');
-let Promise = require('bluebird');
-let crypto = require('crypto');
-let figlet = require('figlet');
+const chalk = require('chalk');
+const ejs = require('ejs');
+const Promise = require('bluebird');
+const crypto = require('crypto');
+const figlet = require('figlet');
+const assign = require('deep-assign');
+const ast = require('ast-query');
+const esformatter = require('esformatter');
+
+exports.ast = function (source, handler, opts) {
+  opts = assign({
+    escode: {
+      format: {
+        compact: false,
+        preserveBlankLines: true
+      },
+      comment: true,
+      sourceCode: source
+    },
+    esprima: {
+      ecmaVersion: 6,
+      tokens: true,
+      range: true
+    },
+    format: {}
+  });
+
+  let tree = ast(source, opts.escode, opts.esprima);
+
+  handler.call(handler, tree);
+
+  return esformatter.format(tree.toString(), opts.format);
+};
 
 exports.header = function (title) {
   return figlet.textSync(title);
