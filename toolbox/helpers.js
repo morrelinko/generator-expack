@@ -24,7 +24,13 @@ exports.ast = function (source, handler, opts) {
       tokens: true,
       range: true
     },
-    format: {}
+    format: {
+      lineBreak: {
+        before: {
+          EndOfFile: 1
+        }
+      }
+    }
   });
 
   let tree = ast(source, opts.escode, opts.esprima);

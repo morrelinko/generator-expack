@@ -12,8 +12,11 @@ module.exports = function (program) {
 
     // -- entry point
     if (['web', 'api'].indexOf(type) !== -1) {
-      this.fs.copy(this.templatePath(`app.${type}.js`),
-        this.destinationPath(`server/apps/${this.name}.js`));
+      this.fs.copyTpl(this.templatePath(`app.${type}.js.stub`),
+        this.destinationPath(`server/apps/${this.name}.js`), {
+          answers: this.answers,
+          name: this.name
+        });
 
       // update server/apps/index.js with app entry point
       let indexFile = this.destinationPath('server/apps/index.js');
@@ -29,6 +32,9 @@ module.exports = function (program) {
     if (type !== 'custom') {
       let handlersPath = this.destinationPath(`server/handlers/${this.name}`);
       mkdirp.sync(handlersPath);
+      this.fs.copy(
+        this.templatePath('handlers.index.js.stub'),
+        path.resolve(handlersPath, 'index.js'));
     }
 
     // -- routes
@@ -92,7 +98,7 @@ module.exports = function (program) {
         port: this.answers.port
       });
 
-      this.fs.write(this.destinationPath('.dotenv'), `${dotenv}\n${dotenvApp}`);
+      this.fs.write(this.destinationPath('.dotenv'), `${dotenv}\n${dotenvApp}\n`);
     }
 
     // -- update .project

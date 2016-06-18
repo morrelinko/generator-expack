@@ -1,17 +1,16 @@
 'use strict';
 
-const http = require('http');
-const express = require('express');
+const express = require('express');<% if (answers.standalone) { %>
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
-const nunjucks = require('../providers/nunjucks');
+const nunjucks = require('../providers/nunjucks');<% } %>
 const config = require('../config');
-const routes = require('../routes/web');
+const routes = require('../routes/<%= name %>');
 
-module.exports = function () {
-  let app = express.Router();
+<% if (answers.standalone) { %>module.exports = function () {
+  let app = express();
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
@@ -30,4 +29,10 @@ module.exports = function () {
   routes(app);
 
   return app;
-};
+};<% } %><% if (!answers.standalone) { %>module.exports = function() {
+  let app = express.Router();
+
+  routes(app);
+
+  return app;
+};<% } %>

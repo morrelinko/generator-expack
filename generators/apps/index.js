@@ -18,5 +18,6 @@ module.exports = generators.Base.extend({
 
   initializing: steps.initializing(program),
   prompting: steps.prompting(program),
+  configuring: steps.configuring(program),
   writing: steps.writing(program)
 });

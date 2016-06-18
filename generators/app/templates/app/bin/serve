@@ -4,19 +4,16 @@ const fs = require('fs');
 const http = require('http');
 const util = require('util');
 const path = require('path');
-const express = require('express');
 const chalk = require('chalk');
 const minimist = require('minimist');
 const dotenv = require('dotenv');
-const config = require('../server/config');
-const apps = require('../server/apps');
 
 dotenv.config({
   path: path.resolve(__dirname, '../.dotenv')
 });
 
-let app = express();
-let server = http.createServer(app);
+const config = require('../server/config');
+const apps = require('../server/apps');
 let argv = minimist(process.argv.slice(2));
 
 fs.readFile(path.resolve(__dirname, '../.project'), (err, data) => {
@@ -40,12 +37,12 @@ fs.readFile(path.resolve(__dirname, '../.project'), (err, data) => {
   }
 
   let cfg = dotp[subapp];
-
   let host = config.get(`app.apps.${subapp}.host`);
   let port = config.get(`app.apps.${subapp}.port`);
 
-  // Mount main app
-  app.use(apps[subapp]());
+  // Initialize main app
+  let app = apps[subapp]();
+  let server = http.createServer(app);
 
   // Mount apps mounted on main app
   for (let i in dotp.apps) {

@@ -21,11 +21,9 @@ config.consts.ENV_PROD = 'production';
 config.consts.ENV_STAGING = 'staging';
 
 // Load config files...
-fs.readdir(__dirname, (err, files) => {
-  for (let i = 0, l = files.length; i < l; i++) {
-    config.load(require('./' + files[i]));
-  }
-});
+config.load(require('./app'));
+config.load(require('./database'));
+config.load(require('./session'));
 
 config.validate();
 

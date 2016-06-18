@@ -1,6 +1,6 @@
 'use strict';
 
-let path = require('path');
+const path = require('path');
 
 module.exports = {
   app: {
@@ -9,6 +9,6 @@ module.exports = {
     debug: false, // false, 1, 2, 3
     token: process.env.APP_TOKEN || '',
     privateKey: path.resolve(__dirname, '../resources/certs/app.private'),
-    publicKey: path.resolve(__dirname, '../resources/certs/app.public'),
+    publicKey: path.resolve(__dirname, '../resources/certs/app.public')
   }
 };

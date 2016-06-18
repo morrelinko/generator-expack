@@ -2,7 +2,7 @@
 
 const path = require('path');
 const nunjucks = require('nunjucks');
-const urlgen = require('../libs/urlgen');
+const upg = require('../libs/urlpathgen');
 const config = require('../config');
 
 let env = module.exports = function (app) {
@@ -14,8 +14,8 @@ let env = module.exports = function (app) {
   // Make the "config" globally accessible in all views.
   app.locals.config = config;
 
-  // Make "urlgen" globally accessible in all views.
-  app.locals.urlgen = urlgen;
+  // Make "urlpathgen" lib globally accessible in all views as "upg".
+  app.locals.upg = upg;
 
   environment.addFilter('json', function (data) {
     return JSON.stringify(data);
