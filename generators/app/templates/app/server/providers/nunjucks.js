@@ -1,12 +1,11 @@
 'use strict';
 
-const path = require('path');
 const nunjucks = require('nunjucks');
 const upg = require('../libs/urlpathgen');
 const config = require('../config');
 
-let env = module.exports = function (app) {
-  let environment = nunjucks.configure(path.resolve(__dirname, '../views/web'), {
+let env = module.exports = function (app, lookup) {
+  let environment = nunjucks.configure(lookup, {
     autoescape: true,
     express: app
   });

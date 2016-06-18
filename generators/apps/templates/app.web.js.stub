@@ -25,8 +25,8 @@ const routes = require('../routes/<%= name %>');
     saveUninitialized: false
   }));
 
-  nunjucks(app);
   routes(app);
+  nunjucks(app, path.resolve(__dirname, '../views/<%= name %>'));
 
   return app;
 };<% } %><% if (!answers.standalone) { %>module.exports = function() {
