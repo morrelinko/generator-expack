@@ -7,7 +7,7 @@ const config = require('../config');
 
 let env = module.exports = function (app) {
   let environment = nunjucks.configure(path.resolve(__dirname, '../views/web'), {
-    autoescape: options.autoescape || true,
+    autoescape: true,
     express: app
   });
 
@@ -15,7 +15,7 @@ let env = module.exports = function (app) {
   app.locals.config = config;
 
   // Make "urlgen" globally accessible in all views.
-  app.locals.urlgen = urlify;
+  app.locals.urlgen = urlgen;
 
   environment.addFilter('json', function (data) {
     return JSON.stringify(data);
