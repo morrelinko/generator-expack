@@ -1,5 +1,5 @@
 {
-  client: "<%= database %>",
+  client: '<%= database %>',
   connection: {
     host: process.env.DB_<%= identifier %>_HOST || '127.0.0.1',
     user: process.env.DB_<%= identifier %>_USERNAME || 'root',

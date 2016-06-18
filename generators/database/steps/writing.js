@@ -49,6 +49,14 @@ module.exports = function (program) {
       database: database
     });
 
+    // Create a knexfile.js if a relational database is selected
+    // this is used by knex lib for migrations and seeding.
+    if (program.helpers.isRelationalDB(this.answers.database)) {
+      if (!this.fs.exists(this.destinationPath('knexfile.js'))) {
+        this.fs.copy(this.templatePath('knexfile.js.stub'), this.destinationPath('knexfile.js'));
+      }
+    }
+
     // TODO: Create knexfile.js if 'database' is relational db
   };
 };
