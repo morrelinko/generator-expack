@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const rp = require('routeplus');
 const config = require('../config');
 
 let up = module.exports = {};
@@ -14,7 +15,7 @@ up.path = up.url = {};
  * @returns {*}
  */
 up.route = function (name, args, options) {
-  return routie.url(name, args, options);
+  return rp.url(name, args, options);
 };
 
 /**
