@@ -67,7 +67,7 @@ Launch your app using
 
 ##### Generators
 
-- Add generator `expack:controller` (generate controller)
+- Add generator `expack:handler` (generate handler (controller))
 - Add generator `expack:model` (genereate model)
 - Add generator `expack:validator` (generate validation middleware)
 - Add generator `expack:auth` scaffold user authentication (passport)

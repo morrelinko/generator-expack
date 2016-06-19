@@ -19,7 +19,7 @@ exports.ast = function (source, handler, opts) {
       comment: true,
       sourceCode: source
     },
-    esprima: {
+    acorn: {
       ecmaVersion: 6,
       tokens: true,
       range: true
@@ -27,13 +27,14 @@ exports.ast = function (source, handler, opts) {
     format: {
       lineBreak: {
         before: {
-          EndOfFile: 1
+          EndOfFile: 1,
+          FunctionExpressionClosingBrace: 1,
         }
       }
     }
   });
 
-  let tree = ast(source, opts.escode, opts.esprima);
+  let tree = ast(source, opts.escode, opts.acorn);
 
   handler.call(handler, tree);
 

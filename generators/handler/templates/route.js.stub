@@ -1,0 +1,17 @@
+'use strict';
+
+const express = require('express');
+const rp = require('routeplus');
+const handlers = require('../../handlers/<%= answers.app %>');
+const validators = require('../../validators/<%= answers.app %>');
+
+let router = rp.adapt(express.Router());
+
+module.exports = function (app) {
+  router.get('/page',
+    rp.build(handlers.<%= answers.name %>.page)
+      .build())
+    .as('page');
+
+  router.mount(app);
+};
