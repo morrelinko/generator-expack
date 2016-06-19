@@ -13,5 +13,14 @@ module.exports = function (program) {
     }
 
     this.answers.name = this.answers.name.toLowerCase();
+
+    if (this.fs.exists(this.destinationPath(`server/handlers/${this.answers.app}/${this.answers.name}.js`))) {
+      this.log([
+        '\n', chalk.red('Error: '),
+        `Handler ${chalk.cyan(this.answers.name)} `,
+        `already exists in app ${chalk.cyan(this.answers.app)}`
+      ].join(''));
+      process.exit(1);
+    }
   };
 };

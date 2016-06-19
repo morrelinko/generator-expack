@@ -7,7 +7,7 @@ module.exports = function (program) {
 
     // create handler file.
     dest.handlerFile = this.destinationPath(`server/handlers/${this.answers.app}/${this.answers.name}.js`);
-    this.fs.copyTpl(this.templatePath('controller.js.stub'), dest.handlerFile, {answers: this.answers});
+    this.fs.copyTpl(this.templatePath('handler.js.stub'), dest.handlerFile, {answers: this.answers});
 
     dest.handlerIndexFile = this.destinationPath(`server/handlers/${this.answers.app}/index.js`);
     dest.handlerIndexData = program.helpers.ast(this.read(dest.handlerIndexFile), function (tree) {
@@ -31,5 +31,16 @@ module.exports = function (program) {
       });
     }.bind(this));
     this.fs.write(dest.routeIndexFile, dest.routeIndexData);
+
+    // create handler validator
+    dest.valFile = this.destinationPath(`server/validators/${this.answers.app}/${this.answers.name}.js`);
+    this.fs.copyTpl(this.templatePath('validator.js.stub'), dest.valFile, {answers: this.answers});
+
+    dest.valIndexFile = this.destinationPath(`server/validators/${this.answers.app}/index.js`);
+    dest.valIndexData = program.helpers.ast(this.read(dest.valIndexFile), function (tree) {
+      tree.assignment('module.exports').value()
+        .key(this.answers.name).value(`require('./${this.answers.name}')`);
+    }.bind(this));
+    this.fs.write(dest.valIndexFile, dest.valIndexData);
   };
 };

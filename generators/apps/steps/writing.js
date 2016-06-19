@@ -49,7 +49,7 @@ module.exports = function (program) {
         }
       );
     }
-
+    
     // -- views
     if (type === 'web') {
       // only generate views for web type
@@ -62,7 +62,14 @@ module.exports = function (program) {
 
     // -- validators
     if (type !== 'custom') {
-      mkdirp.sync(this.destinationPath(`server/validators/${this.name}`));
+      let validatorPath = this.destinationPath(`server/validators/${this.name}`);
+      mkdirp.sync(validatorPath);
+      this.fs.copyTpl(
+        this.templatePath('validator.index.js.stub'),
+        path.resolve(validatorPath, 'index.js'), {
+          name: this.name
+        }
+      );
     }
 
     // -- update server/config/app.js
