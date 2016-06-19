@@ -24,3 +24,7 @@ Full stack application generator
 - Add generator `expack:model` (genereate model)
 - Add generator `expack:validator` (generate validation middleware)
 - Add generator `expack:auth` scaffold user authentication (passport)
+
+##### generator expack:app 
+
+- complete api app stub

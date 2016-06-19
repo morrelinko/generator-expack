@@ -1,0 +1,33 @@
+'use strict';
+
+let http = require('http');
+let path = require('path');
+let express = require('express');
+let Promise = require('bluebird');
+let bodyParser = require('body-parser');
+let config = require('../config');
+let routes = require('../providers/routes');
+let passport = require('../providers/passport');
+let view = require('../providers/view');
+
+let oauth2 = require('../providers/oauth');
+
+let app = express();
+let server = http.Server(app);
+
+app.config = config;
+app.start = function () {
+  return new Promise(resolve => server.listen(config.get('app.api.port'), () => resolve(app)));
+};
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+
+passport.register(app, {});
+oauth2.register(app, {});
+routes.register(app, {definitions: require('../routes/api/index')});
+view.register(app, {path: path.join(__dirname, '/../views/api')});
+
+module.exports = app;

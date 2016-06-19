@@ -1,6 +1,7 @@
 'use strict';
-
-const express = require('express');<% if (answers.standalone) { %>
+<% if (answers.standalone) { %>
+const path = require('path');
+<% } %>const express = require('express');<% if (answers.standalone) { %>
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');

@@ -1,0 +1,18 @@
+'use strict';
+
+const knex = require('knex');
+const bookshelf = require('bookshelf');
+
+function createConnection (cfg) {
+  let connection = knex(cfg);
+  let instance = bookshelf(connection);
+
+  instance.plugin('visibility');
+  instance.plugin('virtuals');
+
+  return instance;
+};
+
+module.exports = function(cfg) {
+  return exports._instance || (exports._instance = createConnection(cfg));
+};

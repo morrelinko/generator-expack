@@ -7,11 +7,12 @@ module.exports = function (program) {
   return function () {
     let config = program.config(this);
 
-    _.forEach(config.get('database'), db => {
-      if (db.identifier == this.answers.identifier) {
-        this.log(`\n${chalk.red('Error:')} Database identifier ${chalk.cyan(db.identifier)} already in use\n`);
-        process.exit(1);
-      }
-    });
+    if (this.answers.identifier in (config.get('database') || {})) {
+      this.log([
+        chalk.red('Error: '), 'Database with identifier',
+        chalk.cyan(this.answers.identifier), 'already in use.'
+      ].join());
+      process.exit(1);
+    }
   };
 };

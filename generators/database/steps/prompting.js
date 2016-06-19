@@ -10,14 +10,6 @@ module.exports = function (program) {
 
     promise = promise.then(function (answers) {
       this.answers = Object.assign(this.answers || {}, answers);
-
-      if (this.answers.identifier in config.get('database')) {
-        this.log(chalk.red(
-          `Database with identifier ${chalk.cyan(
-            this.answers.identifier)} already in use.`
-        ));
-        process.exit(1);
-      }
     }.bind(this));
 
     return promise;

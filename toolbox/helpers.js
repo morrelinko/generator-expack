@@ -44,8 +44,8 @@ exports.header = function (title) {
   return figlet.textSync(title);
 };
 
-exports.readTpl = function (generator, file, context) {
-  return ejs.render(generator.read(file), context);
+exports.readTpl = function (gen, file, context) {
+  return ejs.render(gen.read(file), context);
 };
 
 exports.generateToken = function (bytes) {
@@ -62,13 +62,17 @@ exports.isRelationalDB = function (db) {
   return ['mysql'].indexOf(db) !== -1;
 };
 
-exports.ensureExpack = function (generator, program) {
-  if (!generator.fs.exists(generator.destinationPath('package.json'))
-    && !generator.fs.exists(generator.destinationPath('.project'))) {
-    generator.log(chalk.red([
+exports.ensureExpack = function (gen, program) {
+  if (!gen.fs.exists(gen.destinationPath('package.json'))
+    && !gen.fs.exists(gen.destinationPath('.project'))) {
+    gen.log(chalk.red([
       'This is not an ' + chalk.green(program.title) + ' application.',
       ' Run "' + chalk.cyan('yo expack') + '" to bootstrap an application'
     ].join('')));
     process.exit(1);
   }
+};
+
+exports.readJson = function (gen, file) {
+  return JSON.parse(gen.read(file));
 };
