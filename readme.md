@@ -1,6 +1,55 @@
 # Expack App Generator
 
-Full stack application generator 
+Full stack application generator with multi application feature...
+
+## Installation
+
+Install Yeoman
+
+    $ npm install -g yo
+    
+Install Expack generator
+
+    $ npm install -g generator-expack
+    
+## Usage
+
+First scaffold an app using command below
+    
+    $ yo expack
+    
+### Create app
+
+    $ yo expack:apps web
+    $ npm install
+    
+Launch your app using
+
+    $ node bin/serve web
+    
+### Adding database to your application
+
+    $ yo expack:database
+    
+## Concepts
+
+### Application Types
+
+1. web - selecting this type will setup a conventional web app (flash, sessions, views).
+2. api - selecting this will quickly setup application for a resourceful api.
+3. custom - implement custom app. do the hard work yourself.
+
+### Application Modes
+
+#### standalone 
+
+- Basically an express app `let app = express()`;
+- Runs on its own using `node bin/serve <name>`
+
+#### mounted 
+
+- basically a mini app `let app = express.Router()`;
+- Cannot run on its own. Requires mounting on a standalone app
 
 ## Generators Included
 
@@ -13,9 +62,7 @@ Full stack application generator
 
 ##### expack:database generator
 
-- Use uglifyjs to beautify config after update.
 - Add support for mongodb.
-- Update package.json with selected database dependencies.
 - Generate knexfile.js if a relation db is selected.
 
 ##### Generators
