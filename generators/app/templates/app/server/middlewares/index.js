@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-  validate: require('./validate');
+  validate: require('./validate')
 };
