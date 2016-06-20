@@ -56,6 +56,7 @@ Launch your app using
 - yo expack -> scaffolding
 - yo expack:database -> adds database
 - yo expack:apps -> adds subapp
+- yo expack:handler -> to generate handler & route & validator
 - yo expack:destroy -> [for development only] destroys your app. Muahahaha! 
 
 ## TODO
@@ -67,10 +68,9 @@ Launch your app using
 
 ##### Generators
 
-- Add generator `expack:handler` (generate handler (controller))
-- Add generator `expack:model` (genereate model)
-- Add generator `expack:validator` (generate validation middleware)
 - Add generator `expack:auth` scaffold user authentication (passport)
+- Add generator `expack:model` (generate model)
+- Add generator `expack:validator` (generate validation middleware)
 
 ##### generator expack:app 
 
