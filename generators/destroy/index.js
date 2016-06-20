@@ -37,6 +37,9 @@ module.exports = generators.Base.extend({
     let done = this.async();
     if (this.answers.confirm) {
       let paths = del.sync([
+        this.destinationPath('server/**/*'),
+        this.destinationPath('client/**/*'),
+        this.destinationPath('bin/**/*'),
         this.destinationPath('*'),
         this.destinationPath('.*'),
         '!' + this.destinationPath('node_modules')
