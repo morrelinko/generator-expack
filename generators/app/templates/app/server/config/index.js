@@ -5,7 +5,7 @@ const path = require('path');
 const convict = require('convict');
 const _ = require('lodash');
 
-var config = convict({
+let config = convict({
   env: {
     format: ['production', 'staging', 'development', 'test'],
     default: 'development',
