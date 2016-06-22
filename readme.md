@@ -61,17 +61,21 @@ Launch your app using
 
 ## TODO
 
-##### expack:database generator
-
-- Add support for mongodb.
-- Generate knexfile.js if a relation db is selected.
-
 ##### Generators
 
 - Add generator `expack:auth` scaffold user authentication (passport)
 - Add generator `expack:model` (generate model)
-- Add generator `expack:validator` (generate validation middleware)
 
-##### generator expack:app 
+##### expack:database generator
+
+- Add support for postgres.
+- Add support for sqlite.
+- Add support for mariadb.
+- Add support for mongodb.
+- Generate knexfile.js if a relation db is selected.
+- develop a migration workflow.
+- create base bookshelf model.
+
+##### expack:app generator
 
 - complete api app stub

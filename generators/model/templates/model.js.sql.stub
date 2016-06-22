@@ -1,0 +1,23 @@
+'use strict';
+
+const base = require('./base/<%= answers.database %>.js');
+
+var <%= answers.name_classified %>Model = base.Model.extend({
+  tableName: '<%= answers.table_name %>',
+  hasTimestamps: true,
+
+  permitted: [
+    'id',
+    'created_at',
+    'updated_at'
+  ]
+});
+
+var <%= answers.name_classified %>Collection = base.Collection.extend({
+  model: <%= answers.name_classified %>Model
+});
+
+module.exports = {
+  <%= answers.name_classified %>: <%= answers.name_classified %>Model,
+  <%= answers.name_pluralized %>: <%= answers.name_classified %>Collection
+};
