@@ -1,0 +1,112 @@
+'use strict';
+
+const upg = require('../../libs/urlpathgen');
+const passport = require('../../providers/bootstrap/passport');
+
+module.exports = {
+  /**
+   * GET /auth/login
+   *
+   * @param req
+   * @param res
+   */
+  getLogin (req, res) {
+    res.render('auth/login.nunjucks');
+  },
+
+  /**
+   * POST /auth/login
+   *
+   * @param req
+   * @param res
+   * @param next
+   * @returns {*}
+   */
+  postLogin (req, res, next) {
+    bootstrap.authenticate('local', {
+      failureRedirect: upg.route('auth.login'),
+      successReturnToOrRedirect: upg.route('app.dashboard')
+    })(req, res, next);
+  },
+
+  /**
+   * GET /auth/logout
+   *
+   * @param req
+   * @param res
+   */
+  getLogout (req, res) {
+    req.logout();
+    res.redirect(upgen.route('frontend.home'));
+  },
+
+  /**
+   * GET /auth/register
+   *
+   * @param req
+   * @param res
+   */
+  getRegister (req, res) {
+    res.render('auth/register.nunjucks');
+  },
+
+  /**
+   * POST /auth/register
+   *
+   * @param req
+   * @param res
+   */
+  postRegister (req, res) {
+    res.send('Not Implemented');
+  },
+
+  /**
+   * GET /auth/password/request
+   *
+   * @param req
+   * @param res
+   */
+  getPasswordRequest (req, res) {
+    res.render('auth/password-request.nunjucks');
+  },
+
+  /**
+   * POST /auth/password/request
+   *
+   * @param req
+   * @param res
+   */
+  postPasswordRequest (req, res) {
+    res.send('Not Implemented');
+  },
+
+  /**
+   * GET /auth/password/reset
+   *
+   * @param req
+   * @param res
+   */
+  getPasswordReset (req, res) {
+    res.render('auth/password-reset.nunjucks');
+  },
+
+  /**
+   * POST /auth/password/reset
+   *
+   * @param req
+   * @param res
+   */
+  postPasswordReset (req, res) {
+    res.send('Not Implemented');
+  },
+
+  /**
+   * GET /auth/verify
+   *
+   * @param req
+   * @param res
+   */
+  getVerify (req, res) {
+    res.send('Not Implemented');
+  }
+};

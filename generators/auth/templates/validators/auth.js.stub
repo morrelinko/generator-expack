@@ -1,0 +1,39 @@
+'use strict';
+
+const Checkit = require('checkit');
+const pswd = require('../../libs/password');
+const models = require('../../models/<%= answers.database %>');
+
+/**
+ * Sign up Validator
+ *
+ * @param req
+ * @param res
+ * @returns {*}
+ */
+exports.postRegister = function (req, res) {
+  let checkit = new Checkit({
+    email: ['required', 'email', 'unique:<%= answers.database %>.users:email'],
+    password: ['required'],
+    first_name: [{rule: 'required', label: 'first name'}],
+    last_name: [{rule: 'required', label: 'last name'}]
+  });
+
+  return checkit.validate(req.body);
+};
+
+/**
+ * LogIn Validator
+ *
+ * @param req
+ * @param res
+ * @returns {*}
+ */
+exports.postLogin = function (req, res) {
+  let checkit = new Checkit({
+    email: ['email', 'required', 'exists:mysql.users:email'],
+    password: ['required']
+  });
+
+  return checkit.validate(req.body);
+};
