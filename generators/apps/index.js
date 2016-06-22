@@ -7,13 +7,17 @@ let steps = require('./steps');
 module.exports = generators.Base.extend({
   constructor: function () {
     generators.Base.apply(this, arguments);
-    this.log(program.helpers.header(program.title));
 
     this.argument('name', {
       type: String,
       required: true,
       desc: 'App name'
     });
+
+    this.option('type', {type: String, required: false});
+    this.option('standalone', {type: Boolean, required: false});
+    this.option('path', {type: String, required: false});
+    this.option('app', {type: String, required: false});
   },
 
   initializing: steps.initializing(program),

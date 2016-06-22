@@ -4,119 +4,168 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 
 module.exports = function (program) {
-  return function () {
-    this.name = this.name.toLowerCase();
+  return {
+    run() {
+      this.writing._generateEntry.call(this);
+      this.writing._generateHandler.call(this);
+      this.writing._generateRoute.call(this);
+      this.writing._generateViews.call(this);
+      this.writing._generateValidators.call(this);
+      this.writing._updateAppConfig.call(this);
+      this.writing._updateDotEnv.call(this);
+      this.writing._updateDotProject.call(this);
+    },
 
-    let config = program.config(this);
-    let type = this.answers.type;
+    /**
+     * Creates application entry / bootstrap script.
+     *
+     * @private
+     */
+    _generateEntry() {
+      if (['web', 'api'].indexOf(this.answers.type) != -1) {
+        let dest = this.destinationPath(`server/apps/${this.name}.js`);
+        let template = this.templatePath(`app.${this.answers.type}.js.stub`);
 
-    // -- entry point
-    if (['web', 'api'].indexOf(type) !== -1) {
-      this.fs.copyTpl(this.templatePath(`app.${type}.js.stub`),
-        this.destinationPath(`server/apps/${this.name}.js`), {
-          answers: this.answers,
-          name: this.name
+        this.fs.copyTpl(template, dest, {
+          name: this.name,
+          answers: this.answers
         });
+      }
 
       // update server/apps/index.js with app entry point
       let indexFile = this.destinationPath('server/apps/index.js');
-      let content = program.helpers.ast(this.read(indexFile), function (tree) {
+      let indexData = program.helpers.ast(this.read(indexFile), function (tree) {
         tree.assignment('module.exports').value()
           .key(this.name).value(`require('./${this.name}')`);
       }.bind(this));
 
-      this.fs.write(indexFile, content);
-    }
+      this.fs.write(indexFile, indexData);
+    },
 
-    // -- handlers
-    if (type !== 'custom') {
-      let handlersPath = this.destinationPath(`server/handlers/${this.name}`);
-      mkdirp.sync(handlersPath);
-      this.fs.copy(
-        this.templatePath('handlers.index.js.stub'),
-        path.resolve(handlersPath, 'index.js'));
-    }
+    /**
+     *
+     * @private
+     */
+    _generateHandler() {
+      if (this.answers.type !== 'custom') {
+        let dest = this.destinationPath(`server/handlers/${this.name}`);
+        let template = this.templatePath('handlers.index.js.stub');
+        mkdirp.sync(dest);
+        this.fs.copy(template, path.resolve(dest, 'index.js'));
+      }
+    },
 
-    // -- routes
-    // routes are only generated for api & web type
-    if (type !== 'custom') {
-      let routesPath = this.destinationPath(`server/routes/${this.name}`);
-      mkdirp.sync(routesPath);
-      this.fs.copyTpl(
-        this.templatePath('routes.index.js.stub'),
-        path.resolve(routesPath, 'index.js'), {
-          name: this.name
-        }
-      );
-    }
-    
-    // -- views
-    if (type === 'web') {
-      // only generate views for web type
-      let viewsPath = this.destinationPath(`server/views/${this.name}`);
-      mkdirp.sync(path.resolve(viewsPath, 'layout'));
-      this.fs.copyTpl(
-        this.templatePath('layout.nunjucks.stub'),
-        path.resolve(viewsPath, 'layout', 'template.nunjucks'))
-    }
+    /**
+     *
+     * @private
+     */
+    _generateRoute() {
+      if (this.answers.type !== 'custom') {
+        let dest = this.destinationPath(`server/routes/${this.name}`);
+        let template = this.templatePath('routes.index.js.stub');
+        mkdirp.sync(dest);
+        this.fs.copyTpl(template, path.resolve(dest, 'index.js'), {name: this.name});
+      }
+    },
 
-    // -- validators
-    if (type !== 'custom') {
-      let validatorPath = this.destinationPath(`server/validators/${this.name}`);
-      mkdirp.sync(validatorPath);
-      this.fs.copyTpl(
-        this.templatePath('validator.index.js.stub'),
-        path.resolve(validatorPath, 'index.js'), {
-          name: this.name
-        }
-      );
-    }
+    /**
+     * Generate app view files & dirs.
+     * Views are only generated for 'web' app type.
+     *
+     * @private
+     */
+    _generateViews() {
+      if (this.answers.type === 'web') {
+        let viewsPath = this.destinationPath(`server/views/${this.name}`);
+        let template = this.templatePath('layout.nunjucks.stub');
+        mkdirp.sync(path.resolve(viewsPath, 'layouts'));
+        this.fs.copyTpl(template, path.resolve(viewsPath, 'layouts', 'template.nunjucks'))
+      }
+    },
 
-    // -- update server/config/app.js
-    if (this.answers.standalone && type !== 'custom') {
-      let configFile = this.destinationPath('server/config/app.js');
-      let content = program.helpers.ast(this.read(configFile), function (tree) {
-        tree.__app = tree.assignment('module.exports').value().key('app');
-        tree.__apps = tree.__app.key('apps');
+    /**
+     * Generate route validators
+     * Only generated for app types 'web' & 'api'
+     *
+     * @private
+     */
+    _generateValidators() {
+      if (this.answers.type !== 'custom') {
+        let validatorPath = this.destinationPath(`server/validators/${this.name}`);
+        let templatePath = this.templatePath('validator.index.js.stub');
+        mkdirp.sync(validatorPath);
+        this.fs.copyTpl(templatePath, path.resolve(validatorPath, 'index.js'), {name: this.name});
+      }
+    },
 
-        if (tree.__apps.node.properties.length == 0) {
-          // If the 'apps' key hasn't been defined .
-          // in the config, create it and set its
-          // value to an empty object.
-          tree.__apps.value('{}');
-        }
+    /**
+     * Updates `server/config/app.js`
+     *
+     * @private
+     */
+    _updateAppConfig() {
+      if (this.answers.standalone && this.answers.type !== 'custom') {
+        let configFile = this.destinationPath('server/config/app.js');
+        let templateFile = this.templatePath('config.app.js.stub');
 
-        tree.__apps
-          .key(this.name)
-          .value(program.helpers.readTpl(this, this.templatePath('config.app.js.stub'), {
-            name: this.name,
-            host: this.answers.host,
-            port: this.answers.port
-          }));
-      }.bind(this));
+        let configData = program.helpers.ast(this.read(configFile), function (tree) {
+          tree.__app = tree.assignment('module.exports').value().key('app');
+          tree.__apps = tree.__app.key('apps');
 
-      this.fs.write(configFile, content);
+          if (tree.__apps.node.properties.length == 0) {
+            // If the 'apps' key hasn't been defined .
+            // in the config, create it and set its
+            // value to an empty object.
+            tree.__apps.value('{}');
+          }
 
-      // -- update .dotenv
-      let dotenv = this.read(this.destinationPath('.dotenv'));
-      let dotenvApp = program.helpers.readTpl(this, this.templatePath('.dotenv.stub'), {
+          tree.__apps
+            .key(this.name)
+            .value(program.helpers.readTpl(this, templateFile, {
+              name: this.name,
+              host: this.answers.host,
+              port: this.answers.port
+            }));
+        }.bind(this));
+
+        this.fs.write(configFile, configData);
+      }
+    },
+
+    /**
+     * Update .dotenv file with app host and port details
+     *
+     * @private
+     */
+    _updateDotEnv() {
+      if (this.answers.standalone && this.answers.type !== 'custom') {
+        let dotenvFile = this.destinationPath('.dotenv');
+        let templateFile = this.templatePath('.dotenv.stub');
+        let dotenvData = program.helpers.readTpl(this, templateFile, {
+          name: this.name,
+          host: this.answers.host,
+          port: this.answers.port
+        });
+
+        this.fs.write(dotenvFile, `${this.read(dotenvFile)}\n${dotenvData}\n`);
+      }
+    },
+
+    /**
+     * Updates .project with app details
+     *
+     * @private
+     */
+    _updateDotProject() {
+      program.config(this).set(`apps:${this.name}`, {
         name: this.name,
-        host: this.answers.host,
-        port: this.answers.port
+        type: this.answers.type,
+        standalone: this.answers.standalone,
+        host: this.answers.host || '',
+        port: this.answers.port || '',
+        mount_app: this.answers.mount_app || '',
+        mount_path: this.answers.mount_path || ''
       });
-
-      this.fs.write(this.destinationPath('.dotenv'), `${dotenv}\n${dotenvApp}\n`);
     }
-
-    // -- update .project
-    config.set(`apps:${this.name}`, {
-      name: this.name,
-      type: type,
-      standalone: this.answers.standalone,
-      host: this.answers.host || '',
-      port: this.answers.port || '',
-      mount_app: this.answers.mount_app || '',
-      mount_path: this.answers.mount_path || ''
-    });
   };
 };

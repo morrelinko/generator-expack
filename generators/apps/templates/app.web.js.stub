@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
-const nunjucks = require('../providers/nunjucks');
+const middlewares = require('../middlewares');
 const bootstrap = require('../providers/bootstrap');<% } %>
 const config = require('../config');
 const routes = require('../routes/<%= name %>');
@@ -27,8 +27,9 @@ const routes = require('../routes/<%= name %>');
     saveUninitialized: false
   }));
 
-  bootstrap(app);
-  nunjucks(app, path.resolve(__dirname, '../views/<%= name %>'));
+  bootstrap.boot(app, {app: '<%= name %>'});
+  app.use(middlewares.expack({app: '<%= name %>'}));
+  app.use(middlewares.flash());
   routes(app);
 
   return app;

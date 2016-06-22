@@ -9,7 +9,7 @@ module.exports = function (program) {
     promise = promise.then(function (answers) {
       this.answers = Object.assign(this.answers || {}, answers);
     }.bind(this));
-
+    
     return promise;
   };
 };
