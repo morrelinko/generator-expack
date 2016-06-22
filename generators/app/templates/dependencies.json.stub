@@ -24,7 +24,9 @@
     "multer": "^1.1.0",
     "is-url": "^1.2.1",
     "nock": "^7.7.2",
-    "rand-token": "^0.2.1"
+    "rand-token": "^0.2.1",
+    "recrypt": "^1.0.0",
+    "routeplus": "^0.2.0"
   },
   "devDependencies": {
     "babel-plugin-transform-es2015-classes": "^6.6.5",

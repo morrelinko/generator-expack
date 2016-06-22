@@ -1,0 +1,5 @@
+{% extends "layouts/<%= answers.name %>.nunjucks" %}
+
+{% block content %}
+    Welcome to <%= answers.name %> Main Page
+{% endblock %}

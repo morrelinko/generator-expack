@@ -5,13 +5,14 @@ const rp = require('routeplus');
 const handlers = require('../../handlers/<%= answers.app %>');
 const validators = require('../../validators/<%= answers.app %>');
 
-let router = rp.adapt(express.Router());
-
 module.exports = function (app) {
-  router.get('/page',
-    rp.build(handlers.<%= answers.name %>.page)
+  let router = rp.adapt(express.Router());
+
+  router.get('/<%= answers.name %>',
+    rp.builder(handlers.<%= answers.name %>.getIndex)
+      .validate(validators.<%= answers.name %>.getIndex)
       .build())
-    .as('page');
+    .as('<%= answers.name %>');
 
   router.mount(app);
 };

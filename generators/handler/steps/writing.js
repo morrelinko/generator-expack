@@ -42,5 +42,17 @@ module.exports = function (program) {
         .key(this.answers.name).value(`require('./${this.answers.name}')`);
     }.bind(this));
     this.fs.write(dest.valIndexFile, dest.valIndexData);
+
+    // create handler layout
+    this.fs.copyTpl(this.templatePath('layout.nunjucks.stub'),
+      this.destinationPath(`server/views/${this.answers.app}/layouts/${this.answers.name}.nunjucks`), {
+        answers: this.answers
+      });
+
+    // create handler main
+    this.fs.copyTpl(this.templatePath('view.nunjucks.stub'),
+      this.destinationPath(`server/views/${this.answers.app}/${this.answers.name}/index.nunjucks`), {
+        answers: this.answers
+      });
   };
 };

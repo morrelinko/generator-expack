@@ -20,14 +20,16 @@ module.exports = function (program) {
       this.destinationPath('.gitignore'));
 
     // Create readme.md
-    this.fs.copyTpl(this.templatePath('readme.md.stub'),
+    this.fs.copyTpl(
+      this.templatePath('readme.md.stub'),
       this.destinationPath('readme.md'), {
         name: this.appname,
         description: this.pck.description
       });
 
     // Create .dotenv file
-    this.fs.copyTpl(this.templatePath('.dotenv.stub'),
+    this.fs.copyTpl(
+      this.templatePath('.dotenv.stub'),
       this.destinationPath('.dotenv'), {
         title: this.appname,
         token: program.helpers.generateToken()
@@ -35,7 +37,6 @@ module.exports = function (program) {
 
     // Update package.json
     let deps = JSON.parse(this.read(this.templatePath('dependencies.json.stub')));
-
     this.pck.name = this.appname;
     this.pck.dependencies = deps.dependencies;
     this.pck.devDependencies = deps.devDependencies;

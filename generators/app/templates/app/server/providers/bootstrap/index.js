@@ -1,6 +1,21 @@
 'use strict';
 
-module.exports = function (app) {
-  require('./checkit')(app);
-  require('./routeplus')(app);
+let bootstraps = module.exports = {
+  get checkit() {
+    return require('./checkit').instance;
+  },
+
+  get routeplus() {
+    return require('./routeplus').instance;
+  },
+
+  get nunjucks() {
+    return require('./nunjucks').instance;
+  }
+};
+
+bootstraps.boot = function (app, opts) {
+  require('./checkit').boot(app, opts);
+  require('./nunjucks').boot(app, opts);
+  require('./routeplus').boot(app, opts);
 };

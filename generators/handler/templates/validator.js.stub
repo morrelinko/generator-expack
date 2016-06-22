@@ -1,3 +1,7 @@
 'use strict';
 
-module.exports = {};
+const Checkit = require('checkit');
+
+exports.getIndex = function(req, res) {
+  return true;
+};
