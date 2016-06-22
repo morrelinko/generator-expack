@@ -1,5 +1,6 @@
 'use strict';
 
+const util = require('util');
 const inflect = require('i')();
 
 module.exports = function (program, generator) {
@@ -18,7 +19,10 @@ module.exports = function (program, generator) {
       name: 'database',
       message: 'Select database connection: ',
       choices: databases,
-      default: 0
+      default: 0,
+      when: function (answers) {
+        return util.isUndefined(generator.options.database);
+      }
     },
     {
       type: 'input',
@@ -37,6 +41,9 @@ module.exports = function (program, generator) {
       },
       default: function (answers) {
         return inflect.tableize(answers.name || generator.name);
+      },
+      when: function (answers) {
+        return util.isUndefined(generator.options.database);
       }
     }
   ];
