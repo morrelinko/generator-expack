@@ -1,0 +1,16 @@
+'use strict';
+
+const bookshelf = require('./bookshelf');
+const db = require('../../providers/database');
+
+let BaseModel = db.<%= answers.identifier %>().Model.extend(
+  bookshelf.methods, bookshelf.statics
+);
+
+let BaseCollection = db.<%= answers.identifier %>().Collection.extend({});
+
+module.exports = {
+  Model: BaseModel,
+  Collection: BaseCollection,
+  Knex: db.<%= answers.identifier %>.knex
+};

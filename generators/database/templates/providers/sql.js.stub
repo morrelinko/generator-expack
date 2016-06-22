@@ -2,6 +2,7 @@
 
 const knex = require('knex');
 const bookshelf = require('bookshelf');
+const config = require('../../config');
 
 function createConnection (cfg) {
   let connection = knex(cfg);
@@ -13,6 +14,7 @@ function createConnection (cfg) {
   return instance;
 };
 
-module.exports = function(cfg) {
-  return exports._instance || (exports._instance = createConnection(cfg));
+module.exports = function() {
+  return exports._instance
+   || (exports._instance = createConnection(config.get('database.<%= answers.identifier %>')));
 };

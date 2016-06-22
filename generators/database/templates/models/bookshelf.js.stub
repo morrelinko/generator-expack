@@ -1,0 +1,177 @@
+'use strict';
+
+const _ = require('lodash');
+
+module.exports = {
+  methods: {
+    /**
+     * Sets valid attributes of this domain.
+     * Only the permitted keys will be allowed
+     * when updating and creating records.
+     */
+    permitted: [],
+
+    initialize() {
+      this.on('creating', this.creating, this);
+      this.on('updating', this.updating, this);
+      this.on('saving', this.saving, this);
+    },
+
+    /**
+     * Called before a new record is inserted
+     *
+     * @param model
+     * @param attributes
+     * @param options
+     */
+    creating(model, attributes, options) {
+    },
+
+    /**
+     * Called when updating a record
+     *
+     * @param model
+     * @param attributes
+     * @param options
+     */
+    updating(model, attributes, options) {
+    },
+
+    /**
+     * Called before saving a record
+     *
+     * @param model
+     * @param attributes
+     * @param options
+     */
+    saving(model, attributes, options) {
+      this.attributes = this.pick(this.permitted);
+    },
+
+    /**
+     * Update model
+     *
+     * @param attributes
+     * @param options
+     */
+    update(attributes, options) {
+      return this.save(_.pick(attributes, this.permitted), _.merge({patch: true}, options));
+    }
+  },
+  statics: {
+    /**
+     * Create a record
+     *
+     * Usage:
+     * <code>
+     *   User.create({name: 'John Doe'});
+     * </code>
+     *
+     * @param attributes
+     * @param options
+     * @returns {Session|*}
+     */
+    create(attributes, options) {
+      return this.forge({}).save(attributes, options);
+    },
+
+    /**
+     * Update a record using its ID
+     *
+     * Usage:
+     * <code>
+     *   User.updateById(100, {name: 'John Doe'});
+     * </code>
+     *
+     * @param id
+     * @param attributes
+     * @param options
+     * @returns {Promise.<>|Promise}
+     */
+    updateById: function (id, attributes, options) {
+      return this.findOne({id: id}, options).then(function (model) {
+        return model.save(attributes, options);
+      });
+    },
+
+    /**
+     * Updates a record using advance query parameters
+     *
+     * @param query
+     * @param attributes
+     * @param options
+     * @returns {Promise.<>|Promise}
+     */
+    updateWhere: function (query, attributes, options) {
+      return this.findOne({}, options, query).then(function (model) {
+        return model.save(attributes, options);
+      });
+    },
+
+    /**
+     * Fetches a single record
+     *
+     * Usage:
+     * <code>
+     *   Model.findOne({id: 1});
+     *   Model.findOne({id: 1}, {}, {});
+     * </code>
+     * @param credentials
+     * @param options
+     * @param query
+     * @returns {*|Promise.<Model|null>}
+     */
+    findOne: function (credentials, options, query) {
+      query = query || {};
+      options = _.extend({require: true}, options);
+      return this.forge(credentials).query(query).fetch(options);
+    },
+
+    /**
+     * Fetches a record using its ID
+     *
+     * @param id
+     * @param options
+     * @param query
+     * @returns {*|Promise.<Model|null>}
+     */
+    findById: function (id, options, query) {
+      return this.findOne.call(this, {id: id}, options, query);
+    },
+
+    /**
+     * Fetches all records
+     *
+     * @param options
+     * @returns {*|Promise.<Collection>}
+     */
+    all: function (options) {
+      options = _.extend({require: true}, options);
+      return this.forge({}).fetchAll(options)
+    },
+
+    /**
+     * Fetches multiple records
+     *
+     * @param query
+     * @param options
+     * @returns {*|Promise.<Collection>}
+     */
+    findMany: function (query, options) {
+      options = _.extend({require: true}, options);
+      return this.forge({}).query(query).fetchAll(options);
+    },
+
+    /**
+     * Deletes record(s)
+     *
+     * @param where
+     * @param options
+     * @returns {*}
+     */
+    destroy: function (where, options) {
+      options = options || {};
+      return this.forge({}).where(where).destroy(options);
+    }
+  }
+};

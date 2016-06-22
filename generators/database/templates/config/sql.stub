@@ -1,0 +1,10 @@
+{
+  client: '<%= answers.database %>',
+  connection: {
+    host: process.env.DB_<%= answers.identifier.toUpperCase() %>_HOST || '127.0.0.1',
+    user: process.env.DB_<%= answers.identifier.toUpperCase() %>_USERNAME || 'root',
+    password: process.env.DB_<%= answers.identifier.toUpperCase() %>_PASSWORD || '',
+    database: process.env.DB_<%= answers.identifier.toUpperCase() %>_DATABASE,
+    charset: process.env.DB_<%= answers.identifier.toUpperCase() %>_CHARSET || 'utf8'
+  }
+}

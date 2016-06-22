@@ -1,4 +1,0 @@
-DB_<%= identifier %>_HOST=localhost
-DB_<%= identifier %>_DATABASE=expack_app
-DB_<%= identifier %>_USERNAME=root
-DB_<%= identifier %>_PASSWORD=123456
