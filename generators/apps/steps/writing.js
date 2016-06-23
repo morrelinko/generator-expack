@@ -76,10 +76,11 @@ module.exports = function (program) {
      */
     _generateViews() {
       if (this.answers.type === 'web') {
-        let viewsPath = this.destinationPath(`server/views/${this.name}`);
-        let template = this.templatePath('layout.nunjucks.stub');
-        mkdirp.sync(path.resolve(viewsPath, 'layouts'));
-        this.fs.copyTpl(template, path.resolve(viewsPath, 'layouts', 'template.nunjucks'))
+        let layoutPath = this.destinationPath(`server/views/layouts`);
+        let viewsPath = path.resolve(layoutPath, `${this.name}.nunjucks`);
+        let templatePath = this.templatePath('layout.nunjucks.stub');
+        mkdirp.sync(layoutPath);
+        this.fs.copyTpl(templatePath, viewsPath)
       }
     },
 

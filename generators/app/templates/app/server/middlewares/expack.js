@@ -3,6 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 const Promise = require('bluebird');
+const expack = require('../libs/expack');
 
 let _project = null;
 let readFile = Promise.promisify(fs.readFile, {
@@ -11,22 +12,8 @@ let readFile = Promise.promisify(fs.readFile, {
 
 let middleware = module.exports = function (opts) {
   return function (req, res, next) {
-    let promise = Promise.resolve();
-
-    if (!_project) {
-      promise = promise.then(() =>
-        readFile(path.resolve(__dirname, '../../.project')))
-        .then(data => _project = JSON.parse(data));
-    } else {
-      promise = promise.then(() => _project);
-    }
-
-    promise.then(proj => {
-      req.expack = _project;
-      req.expack.app = opts.app;
-      // req.expack = expack(opts.app, _project);
-    })
-      .then(next);
+    req.expack = expack(opts);
+    next();
   };
 };
 

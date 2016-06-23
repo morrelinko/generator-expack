@@ -6,13 +6,17 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
+const rp = require('routeplus');
 const middlewares = require('../middlewares');
 const bootstrap = require('../providers/bootstrap');<% } %>
+const rp = require('routeplus');
 const config = require('../config');
 const routes = require('../routes/<%= name %>');
 
-<% if (answers.standalone) { %>module.exports = function () {
+<% if (answers.standalone) { %>module.exports = function (opts) {
   let app = express();
+  let router = rp.adapt(express.Router());
+  opts.appId = '<%= name %>';
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
@@ -27,15 +31,19 @@ const routes = require('../routes/<%= name %>');
     saveUninitialized: false
   }));
 
-  bootstrap.boot(app, {app: '<%= name %>'});
-  app.use(middlewares.expack({app: '<%= name %>'}));
-  app.use(middlewares.flash());
-  routes(app);
+  bootstrap.boot(app, {appId: opts.appId});
+  router.use(middlewares.expack(opts));
+  router.use(middlewares.flash());
+  routes(router);
+  app.use(router);
 
   return app;
-};<% } %><% if (!answers.standalone) { %>module.exports = function() {
-  let app = express.Router();
+};<% } %><% if (!answers.standalone) { %>module.exports = function(opts) {
+  let app = rp.adapt(express.Router());
+  opts.appId = '<%= name %>';
 
+  app.use(middlewares.expack(opts));
+  app.use(middlewares.flash());
   routes(app);
 
   return app;

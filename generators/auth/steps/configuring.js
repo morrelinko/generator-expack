@@ -19,6 +19,14 @@ module.exports = function (program) {
       }
     });
 
+    this.composeWith('expack:model', {
+      args: ['user'],
+      options: {
+        database: this.answers.database,
+        table: 'users'
+      }
+    });
+
     if (config.get('auth')) {
       this.log([
         '\n', chalk.red('Error: '), `Auth app already exists.`

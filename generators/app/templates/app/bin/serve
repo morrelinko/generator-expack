@@ -39,9 +39,10 @@ fs.readFile(path.resolve(__dirname, '../.project'), (err, data) => {
   let cfg = dotp[subapp];
   let host = config.get(`app.apps.${subapp}.host`);
   let port = config.get(`app.apps.${subapp}.port`);
+  let opts = {project: dotp};
 
   // Initialize main app
-  let app = apps[subapp]();
+  let app = apps[subapp](opts);
   let server = http.createServer(app);
 
   // Mount apps mounted on main app

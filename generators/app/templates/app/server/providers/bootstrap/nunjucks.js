@@ -10,7 +10,7 @@ module.exports = {
   boot (app, opts) {
     if (!this.instance) {
       let environment = nunjucks.configure(
-        path.resolve(__dirname, '../../views', opts.app), {
+        path.resolve(__dirname, '../../views'), {
           autoescape: true,
           express: app
         });
