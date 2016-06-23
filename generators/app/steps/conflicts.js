@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = function (gen) {
+module.exports = function (program) {
   return function () {
-    this.log('Conflicts');
+
   };
 };

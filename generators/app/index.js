@@ -7,6 +7,7 @@ let steps = require('./steps');
 module.exports = generators.Base.extend({
   constructor: function () {
     generators.Base.apply(this, arguments);
+    this.argument('name', {type: String, required: false});
   },
 
   initializing: steps.initializing(program),

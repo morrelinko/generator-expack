@@ -6,7 +6,8 @@ module.exports = function (program, generator) {
       type: 'input',
       name: 'name',
       message: 'App Name:',
-      default: generator.appname
+      default: generator.appname,
+      when: !generator.name,
     }
   ];
 };
