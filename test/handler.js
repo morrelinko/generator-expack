@@ -6,10 +6,8 @@ const test = require('yeoman-test');
 const assert = require('yeoman-assert');
 const helpers = require('./helpers');
 
-
 describe('expack:handler', function () {
-
-  // Generate project
+  // Create project
   before(function () {
     return helpers.run(path.join(__dirname, '../generators/app'))
       .inDir(path.join(__dirname, '/temp/generator-handler'))

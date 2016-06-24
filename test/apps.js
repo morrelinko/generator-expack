@@ -6,7 +6,6 @@ const test = require('yeoman-test');
 const assert = require('yeoman-assert');
 const helpers = require('./helpers');
 
-
 describe('expack:apps', function () {
 
   before(function () {
