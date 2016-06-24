@@ -1,6 +1,6 @@
 'use strict';
 
-const base = require('./base/<%= answers.database %>.js');
+const base = require('./base/<%= answers.database %>');
 
 var <%= answers.name_classified %>Model = base.Model.extend({
   tableName: '<%= answers.table_name %>',
