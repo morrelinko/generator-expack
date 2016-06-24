@@ -25,20 +25,18 @@ module.exports = function (program) {
 
     // Ensure selected database exists.
     if (!(this.answers.database in config.get('database'))) {
-      this.log([
+      this.env.error([
         '\n', chalk.red('Error: '),
         `Database ${chalk.cyan(this.answers.database)} does not exists.`
       ].join(''));
-      process.exit(1);
     }
 
     if (this.fs.exists(this.destinationPath(`server/models/${this.answers.name}.js`))) {
-      this.log([
+      this.env.error([
         '\n', chalk.red('Error:'),
         `Model ${chalk.cyan(inflect.camelize(this.answers.name, true))}`,
         'already exists'
       ].join(' '));
-      process.exit(1);
     }
   };
 };
