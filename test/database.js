@@ -20,7 +20,7 @@ describe('expack:database', function () {
     helpers.clear([path.join(__dirname, '/temp/generator-database')], done);
   });
 
-  describe('setup mysql database', function () {
+  describe('generate relational DB', function () {
     before(function () {
       this.beforePckg = JSON.parse(fs.readFileSync('package.json').toString());
       return helpers.run(path.join(__dirname, '../generators/database'))
@@ -77,5 +77,13 @@ describe('expack:database', function () {
         }
       });
     });
+  });
+
+  describe('generate mongo DB', function () {
+
+  });
+
+  describe('generate couch DB', function () {
+
   });
 });
