@@ -66,11 +66,10 @@ exports.isRelationalDB = function (db) {
 exports.ensureExpack = function (gen, program) {
   if (!gen.fs.exists(gen.destinationPath('package.json'))
     && !gen.fs.exists(gen.destinationPath('.project'))) {
-    gen.log(chalk.red([
+    gen.env.error(chalk.red([
       'This is not an ' + chalk.green(program.title) + ' application.',
       ' Run "' + chalk.cyan('yo expack') + '" to bootstrap an application'
     ].join('')));
-    process.exit(1);
   }
 };
 

@@ -9,8 +9,10 @@ module.exports = function (program) {
     program.helpers.ensureExpack(this, program);
 
     if (config.get(`apps:${this.name.toLowerCase()}`)) {
-      this.log(chalk.red(`\nApp ${chalk.cyan(this.name)} already exists.\n`));
-      process.exit(1);
+      this.env.error([
+        '\n', chalk.red('Error:'),
+        'App', chalk.cyan(this.name), 'already exists'
+      ].join(' '));
     }
 
     return program.helpers.wait(400);

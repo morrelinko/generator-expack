@@ -17,9 +17,6 @@ module.exports = function (program) {
       port: this.options.port
     }, this.answers);
 
-    this.log(this.answers);
-    process.exit();
-
     _.forEach(config.get('apps'), app => {
       if (app.port == this.answers.port) {
         this.log(`\n${chalk.red('Error:')} App ${chalk.cyan(app.name)} already using port ${chalk.cyan(port)}\n`);

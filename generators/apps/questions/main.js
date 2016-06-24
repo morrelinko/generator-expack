@@ -55,6 +55,10 @@ module.exports = function (program, generator) {
           usedPorts.push(app.port);
         });
 
+        if (usedPorts.length === 0) {
+          return 8080;
+        }
+
         return Number(_.max(usedPorts)) + 1;
       },
     },

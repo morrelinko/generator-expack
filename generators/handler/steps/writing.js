@@ -1,58 +1,98 @@
 'use strict';
 
 module.exports = function (program) {
-  return function () {
-    let config = program.config(this);
-    let dest = {};
+  return {
+    run() {
+      this.writing._generateHandler.call(this);
+      this.writing._generateRoute.call(this);
+      this.writing._generateValidator.call(this);
+      this.writing._generateView.call(this);
+    },
 
-    // create handler file.
-    dest.handlerFile = this.destinationPath(`server/handlers/${this.answers.app}/${this.answers.name}.js`);
-    this.fs.copyTpl(this.templatePath('handler.js.stub'), dest.handlerFile, {answers: this.answers});
+    /**
+     * Generate handler file.
+     * Passing the `--no-separate` option will handler
+     * methods in the index.js file as opposed to the
+     * `--separate` that will generate a separate file for the
+     * handler and a reference to it in the handler file.
+     *
+     * @private
+     */
+    _generateHandler() {
+      let handlerFile = this.answers.separate
+        ? this.destinationPath(`server/handlers/${this.answers.app}/${this.answers.name}.js`)
+        : this.destinationPath(`server/handlers/${this.answers.app}/index.js`);
+      let templateFile = this.templatePath('handler.js.stub');
 
-    dest.handlerIndexFile = this.destinationPath(`server/handlers/${this.answers.app}/index.js`);
-    dest.handlerIndexData = program.helpers.ast(this.read(dest.handlerIndexFile), function (tree) {
-      tree.assignment('module.exports').value()
-        .key(this.answers.name).value(`require('./${this.answers.name}')`);
-    }.bind(this));
-    this.fs.write(dest.handlerIndexFile, dest.handlerIndexData);
+      if (this.answers.separate) {
+        let handlerIndexFile = this.destinationPath(`server/handlers/${this.answers.app}/index.js`);
+        let handlerIndexData = program.helpers.ast(this.read(handlerIndexFile), function (tree) {
+          tree.assignment('module.exports').value()
+            .key(this.answers.name).value(`require('./${this.answers.name}')`);
+        }.bind(this));
 
-    // create handler routes.
-    dest.routeFile = this.destinationPath(`server/routes/${this.answers.app}/${this.answers.name}.js`);
-    this.fs.copyTpl(this.templatePath('route.js.stub'), dest.routeFile, {answers: this.answers});
+        this.fs.write(handlerIndexFile, handlerIndexData);
+      }
 
-    dest.routeIndexFile = this.destinationPath(`server/routes/${this.answers.app}/index.js`);
-    dest.routeIndexData = program.helpers.ast(this.read(dest.routeIndexFile), function (tree) {
-      tree.__body = tree.assignment('module.exports').value().body;
-      tree.__body.append(`require('./${this.answers.name}')(app);`);
-      tree.__body.node.map(node => {
-        if (!node.range) {
-          node.range = [node.start, node.end];
-        }
-      });
-    }.bind(this));
-    this.fs.write(dest.routeIndexFile, dest.routeIndexData);
+      this.fs.copyTpl(templateFile, handlerFile, {answers: this.answers});
+    },
 
-    // create handler validator
-    dest.valFile = this.destinationPath(`server/validators/${this.answers.app}/${this.answers.name}.js`);
-    this.fs.copyTpl(this.templatePath('validator.js.stub'), dest.valFile, {answers: this.answers});
+    /**
+     *
+     * @private
+     */
+    _generateRoute() {
+      let routeFile = this.answers.separate
+        ? this.destinationPath(`server/routes/${this.answers.app}/${this.answers.name}.js`)
+        : this.destinationPath(`server/routes/${this.answers.app}/index.js`);
+      let templateFile = this.templatePath('route.js.stub');
 
-    dest.valIndexFile = this.destinationPath(`server/validators/${this.answers.app}/index.js`);
-    dest.valIndexData = program.helpers.ast(this.read(dest.valIndexFile), function (tree) {
-      tree.assignment('module.exports').value()
-        .key(this.answers.name).value(`require('./${this.answers.name}')`);
-    }.bind(this));
-    this.fs.write(dest.valIndexFile, dest.valIndexData);
+      if (this.answers.separate) {
+        let routeIndexFile = this.destinationPath(`server/routes/${this.answers.app}/index.js`);
+        let routeIndexData = program.helpers.ast(this.read(routeIndexFile), function (tree) {
+          tree.__body = tree.assignment('module.exports').value().body;
+          tree.__body.append(`require('./${this.answers.name}')(app);`);
+          tree.__body.node.map(node => {
+            if (!node.range) {
+              node.range = [node.start, node.end];
+            }
+          });
+        }.bind(this));
 
-    // create handler layout
-    this.fs.copyTpl(this.templatePath('layout.nunjucks.stub'),
-      this.destinationPath(`server/views/${this.answers.app}/layouts/${this.answers.name}.nunjucks`), {
-        answers: this.answers
-      });
+        this.fs.write(routeIndexFile, routeIndexData);
+      }
 
-    // create handler main
-    this.fs.copyTpl(this.templatePath('view.nunjucks.stub'),
-      this.destinationPath(`server/views/${this.answers.app}/${this.answers.name}/index.nunjucks`), {
-        answers: this.answers
-      });
+      this.fs.copyTpl(templateFile, routeFile, {answers: this.answers});
+    },
+
+    /**
+     *
+     * @private
+     */
+    _generateValidator() {
+      let validatorFile = this.answers.separate
+        ? this.destinationPath(`server/validators/${this.answers.app}/${this.answers.name}.js`)
+        : this.destinationPath(`server/validators/${this.answers.app}/index.js`);
+      let templateFile = this.templatePath('validator.js.stub');
+
+      if (this.answers.separate) {
+        let valIndexFile = this.destinationPath(`server/validators/${this.answers.app}/index.js`);
+        let valIndexData = program.helpers.ast(this.read(valIndexFile), function (tree) {
+          tree.assignment('module.exports').value()
+            .key(this.answers.name).value(`require('./${this.answers.name}')`);
+        }.bind(this));
+        this.fs.write(valIndexFile, valIndexData);
+      }
+
+      this.fs.copyTpl(templateFile, validatorFile, {answers: this.answers});
+    },
+
+    _generateView() {
+      let viewFile = this.answers.separate
+        ? this.destinationPath(`server/views/${this.answers.app}/${this.answers.name}/index.nunjucks`)
+        : this.destinationPath(`server/views/${this.answers.app}/index.nunjucks`);
+      let templatePath = this.templatePath('view.nunjucks.stub');
+      this.fs.copyTpl(templatePath, viewFile, {answers: this.answers});
+    }
   };
 };

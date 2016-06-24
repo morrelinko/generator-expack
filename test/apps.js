@@ -17,7 +17,8 @@ describe('expack:apps', function () {
   });
 
   after(function (done) {
-    helpers.clear([path.join(__dirname, '/temp/generator-apps')], done);
+    // helpers.clear([path.join(__dirname, '/temp/generator-apps')], done);
+    done();
   });
 
   describe('generates standalone app', function () {

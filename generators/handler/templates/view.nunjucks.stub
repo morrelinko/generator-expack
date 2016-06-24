@@ -1,4 +1,4 @@
-{% extends "layouts/<%= answers.name %>.nunjucks" %}
+{% extends "layouts/<%= answers.app %>.nunjucks" %}
 
 {% block content %}
     Welcome to <%= answers.name %> Main Page

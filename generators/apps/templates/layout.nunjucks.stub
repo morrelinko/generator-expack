@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ config.get('app.title') }}</title>
-</head>
-<body>
-{% block template_content %}{% endblock %}
-</body>
-</html>
+{% extends "layouts/template.nunjucks"}
+
+{% block template:content %}
+  {% block content %}{% endblock %}
+{% endblock %}

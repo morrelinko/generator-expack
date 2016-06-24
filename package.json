@@ -6,6 +6,9 @@
     "title": "ExPack"
   },
   "description": "Express Packed Application",
+  "scripts": {
+    "test": "mocha test/handler.js"
+  },
   "files": [
     "generators/app",
     "generators/router"
@@ -25,9 +28,14 @@
     "glob": "^7.0.3",
     "i": "^0.3.5",
     "js-beautify": "^1.6.3",
-    "lodash": "^4.13.1",
     "mkdirp": "^0.5.1",
+    "lodash": "^4.13.1",
     "nconf": "^0.8.4",
     "yeoman-generator": "^0.23.3"
+  },
+  "devDependencies": {
+    "mocha": "^2.5.3",
+    "yeoman-assert": "^2.2.1",
+    "yeoman-test": "^1.4.0"
   }
 }
