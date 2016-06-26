@@ -17,9 +17,9 @@ module.exports = function (program) {
         standalone: false,
         app: this.answers.app,
         path: '/auth',
-        withHandler: false,
-        withRoute: false,
-        withValidator: false
+        'with-handler': false,
+        'with-route': false,
+        'with-validator': false
       }
     }, {
       local: path.resolve(__dirname, '../../apps'),

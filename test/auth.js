@@ -81,7 +81,7 @@ describe('expack:auth', function () {
     it('should generate user model', function () {
       assert.file('server/models/user.js');
       assert.file('server/models/index.js');
-      assert.fileContent('server/models/index.js', `User: require('./`);
+      assert.fileContent('server/models/index.js', `User: require('./user').User`);
       assert.fileContent('server/models/user.js',
         `model.set('password', password.hash(attributes.password));`);
     });

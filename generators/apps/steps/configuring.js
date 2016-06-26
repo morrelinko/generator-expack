@@ -15,9 +15,9 @@ module.exports = function (program) {
       mount_path: this.options.path,
       host: this.options.host,
       port: this.options.port,
-      withHandler: this.options.withHandler,
-      withRoute: this.options.withRoute,
-      withRoute: this.options.withValidator
+      withHandler: this.options['with-handler'],
+      withRoute: this.options['with-route'],
+      withValidator: this.options['with-validator']
     }, this.answers);
 
     _.forEach(config.get('apps'), app => {

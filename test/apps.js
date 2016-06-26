@@ -19,7 +19,7 @@ describe('expack:apps', function () {
     helpers.clear([path.join(__dirname, '/temp/generator-apps')], done);
   });
 
-  describe('generates standalone app', function () {
+  describe('generating standalone app', function () {
     before(function () {
       return helpers.run(path.join(__dirname, '../generators/apps'))
         .withArguments(['app'])
@@ -73,7 +73,7 @@ describe('expack:apps', function () {
     });
   });
 
-  describe('generates mounted app', function () {
+  describe('generating mounted app', function () {
     before(function () {
       return helpers.run(path.join(__dirname, '../generators/apps'))
         .withArguments(['docs'])
