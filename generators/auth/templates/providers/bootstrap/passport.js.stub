@@ -1,0 +1,38 @@
+'use strict';
+
+const Promise = require('bluebird');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const pswd = require('../../libs/password');
+const errors = require('../../libs/errors');
+const models = require('../../models');
+
+module.exports = {
+  instance: null,
+  boot (app, opts) {
+    if (!this.instance) {
+      passport.serializeUser(function (user, cb) {
+        return cb(null, user.id);
+      });
+
+      passport.deserializeUser(function (id, cb) {
+        <%- deserialize_user_code %>
+      });
+
+      // Configure the local strategy
+      passport.use('local', new LocalStrategy({
+        usernameField: 'email',
+        passwordField: 'password'
+      }, verify));
+
+      app.use(passport.initialize());
+      app.use(passport.session());
+
+      this.instance = passport;
+
+      function verify(email, pass, cb) {
+        <%- verify_user_code %>
+      }
+    }
+  }
+};

@@ -31,7 +31,7 @@ exports.postRegister = function (req, res) {
  */
 exports.postLogin = function (req, res) {
   let checkit = new Checkit({
-    email: ['email', 'required', 'exists:mysql.users:email'],
+    email: ['email', 'required', 'exists:<%= answers.database %>.users:email'],
     password: ['required']
   });
 

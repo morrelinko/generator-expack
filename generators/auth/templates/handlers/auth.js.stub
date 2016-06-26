@@ -23,7 +23,7 @@ module.exports = {
    * @returns {*}
    */
   postLogin (req, res, next) {
-    bootstrap.authenticate('local', {
+    bootstrap.passport.authenticate('local', {
       failureRedirect: upg.route('auth.login'),
       successReturnToOrRedirect: upg.route('app.dashboard')
     })(req, res, next);

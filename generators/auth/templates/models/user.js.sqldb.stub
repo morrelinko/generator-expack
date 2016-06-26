@@ -1,0 +1,38 @@
+'use strict';
+
+const base = require('./base/<%= answers.database %>');
+const password = require('../libs/password');
+
+let UserModel = base.Model.extend({
+  tableName: 'users',
+  hasTimestamps: true,
+
+  permitted: [
+    'id',
+    'email',
+    'password',
+    'first_name',
+    'last_name',
+    'created_at',
+    'updated_at'
+  ],
+
+  hidden: [
+    'password'
+  ],
+
+  creating(model, attributes, options) {
+    if (attributes.password) {
+      model.set('password', password.hash(attributes.password));
+    }
+  }
+});
+
+var UserCollection = base.Collection.extend({
+  model: UserModel
+});
+
+module.exports = {
+  User: UserModel,
+  Users: UserCollection
+};

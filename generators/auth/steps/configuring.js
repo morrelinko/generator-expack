@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const _ = require('lodash');
 const inflect = require('i')();
 const chalk = require('chalk');
@@ -15,23 +16,30 @@ module.exports = function (program) {
         type: 'web',
         standalone: false,
         app: this.answers.app,
-        path: '/auth'
+        path: '/auth',
+        withHandler: false,
+        withRoute: false,
+        withValidator: false
       }
+    }, {
+      local: path.resolve(__dirname, '../../apps'),
+      link: 'strong'
     });
 
-    this.composeWith('expack:model', {
-      args: ['user'],
+    this.composeWith('expack:handler', {
+      args: [],
       options: {
-        database: this.answers.database,
-        table: 'users'
+        separate: false,
+        app: this.answers.app
       }
+    }, {
+      local: path.resolve(__dirname, '../../handler')
     });
 
     if (config.get('auth')) {
-      this.log([
+      this.env.error([
         '\n', chalk.red('Error: '), `Auth app already exists.`
       ].join(''));
-      process.exit(1);
     }
   };
 };

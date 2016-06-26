@@ -2,55 +2,55 @@
 
 const express = require('express');
 const rp = require('routeplus');
-const handlers = require('../../handlers/web');
-const validators = require('../../validators/web');
+const handlers = require('../../handlers/auth');
+const validators = require('../../validators/auth');
 
 module.exports = function (app) {
   app.get('/auth/login',
-    rp.builder(handlers.auth.getLogin)
+    rp.builder(handlers.getLogin)
       .guest().build())
     .as('auth.login');
 
   app.post('/auth/login',
-    rp.builder(handlers.auth.postLogin)
-      .validate.web(validators.auth.postLogin)
+    rp.builder(handlers.postLogin)
+      .validate.web(validators.postLogin)
       .guest().build());
 
   app.get('/register',
-    rp.builder(handlers.auth.getRegister)
+    rp.builder(handlers.getRegister)
       .guest().build())
     .as('auth.register');
 
   app.post('/register',
-    rp.builder(handlers.auth.postRegister)
-      .validate(validators.auth.postRegister)
+    rp.builder(handlers.postRegister)
+      .validate(validators.postRegister)
       .guest().build());
 
   app.get('/logout',
-    rp.builder(handlers.auth.getLogout)
+    rp.builder(handlers.getLogout)
       .auth().build())
     .as('auth.logout');
 
   app.get('/password',
-    rp.builder(handlers.auth.getPasswordRequest)
+    rp.builder(handlers.getPasswordRequest)
       .build())
     .as('auth.password.request');
 
   app.post('/password',
-    rp.builder(handlers.auth.postPasswordRequest)
+    rp.builder(handlers.postPasswordRequest)
       .build());
 
   app.get('/password/reset',
-    rp.builder(handlers.auth.getPasswordReset)
+    rp.builder(handlers.getPasswordReset)
       .build())
     .as('auth.password.reset');
 
   app.post('/password/reset',
-    rp.builder(handlers.auth.getPasswordReset)
+    rp.builder(handlers.getPasswordReset)
       .build());
 
   app.get('/verify',
-    rp.builder(handlers.auth.getVerify)
+    rp.builder(handlers.getVerify)
       .auth().build())
     .as('auth.verify');
 };

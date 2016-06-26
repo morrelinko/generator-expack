@@ -49,9 +49,12 @@ module.exports = function (program) {
     _generateHandler() {
       if (this.answers.type !== 'custom') {
         let dest = this.destinationPath(`server/handlers/${this.name}`);
-        let template = this.templatePath('handlers.index.js.stub');
         mkdirp.sync(dest);
-        this.fs.copy(template, path.resolve(dest, 'index.js'));
+
+        if (this.answers.withHandler) {
+          let template = this.templatePath('handlers.index.js.stub');
+          this.fs.copy(template, path.resolve(dest, 'index.js'));
+        }
       }
     },
 
@@ -62,9 +65,12 @@ module.exports = function (program) {
     _generateRoute() {
       if (this.answers.type !== 'custom') {
         let dest = this.destinationPath(`server/routes/${this.name}`);
-        let template = this.templatePath('routes.index.js.stub');
         mkdirp.sync(dest);
-        this.fs.copyTpl(template, path.resolve(dest, 'index.js'), {name: this.name});
+
+        if (this.answers.withRoute) {
+          let template = this.templatePath('routes.index.js.stub');
+          this.fs.copyTpl(template, path.resolve(dest, 'index.js'), {name: this.name});
+        }
       }
     },
 
@@ -94,9 +100,12 @@ module.exports = function (program) {
     _generateValidators() {
       if (this.answers.type !== 'custom') {
         let validatorPath = this.destinationPath(`server/validators/${this.name}`);
-        let templatePath = this.templatePath('validator.index.js.stub');
         mkdirp.sync(validatorPath);
-        this.fs.copyTpl(templatePath, path.resolve(validatorPath, 'index.js'), {name: this.name});
+
+        if (this.answers.withValidator) {
+          let templatePath = this.templatePath('validator.index.js.stub');
+          this.fs.copyTpl(templatePath, path.resolve(validatorPath, 'index.js'), {name: this.name});
+        }
       }
     },
 

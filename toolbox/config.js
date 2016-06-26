@@ -15,6 +15,11 @@ module.exports = function (generator) {
 
     get(name) {
       return nconf.get(name);
+    },
+
+    databaseOf(identifier) {
+      let db = this.get(`database:${identifier}`);
+      return db.database;
     }
   };
 };

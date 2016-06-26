@@ -14,7 +14,10 @@ module.exports = function (program) {
       mount_app: this.options.app,
       mount_path: this.options.path,
       host: this.options.host,
-      port: this.options.port
+      port: this.options.port,
+      withHandler: this.options.withHandler,
+      withRoute: this.options.withRoute,
+      withRoute: this.options.withValidator
     }, this.answers);
 
     _.forEach(config.get('apps'), app => {

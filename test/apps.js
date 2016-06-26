@@ -30,9 +30,6 @@ describe('expack:apps', function () {
           host: '127.0.0.1',
           port: 8083
         })
-        .on('error', function () {
-          console.log('Error');
-        })
         .toPromise();
     });
 

@@ -7,7 +7,7 @@
   },
   "description": "Express Packed Application",
   "scripts": {
-    "test": "mocha test/*.js"
+    "test": "mocha test/auth.js"
   },
   "files": [
     "generators/app",

@@ -11,6 +11,7 @@ module.exports = generators.Base.extend({
     this.argument('name', {required: false});
     this.option('database', {type: String, required: false});
     this.option('table', {type: String, required: false});
+    this.option('template', {type: String, required: false, default: null});
   },
 
   initializing: steps.initializing(program),

@@ -1,0 +1,23 @@
+'use strict';
+
+/**
+ * Guest middleware
+ *
+ * Ensures that a user is *not* logged in
+ * before they can access the requested resource
+ *
+ * Usage:
+ * <code>
+ *  router.get('/login', handler.builder(ctrl).guest().build());
+ * </code>
+ */
+
+const ensureLoggedOut = require('connect-ensure-login').ensureLoggedOut;
+const upgen = require('../libs/urlpathgen');
+
+let middleware = module.exports = ensureLoggedOut;
+
+middleware.builder = function () {
+  this.use(middleware(), 0);
+  return this;
+};

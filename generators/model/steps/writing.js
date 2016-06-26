@@ -13,7 +13,7 @@ module.exports = function (program) {
      */
     _createModel() {
       let dest = this.destinationPath(`server/models/${this.answers.name_dasherized}.js`);
-      let template = this.templatePath('model.js.sql.stub');
+      let template = this.answers.template || this.templatePath('model.js.sql.stub');
 
       let modelData = program.helpers.readTpl(this, template, {
         answers: this.answers

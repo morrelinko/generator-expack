@@ -16,7 +16,8 @@ module.exports = function (program) {
     this.answers = _.defaults({
       name: this.name,
       table_name: this.options.table,
-      database: this.options.database
+      database: this.options.database,
+      template: this.options.template
     }, this.answers);
 
     this.answers.name_dasherized = inflect.dasherize(this.answers.name);

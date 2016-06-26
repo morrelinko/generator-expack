@@ -1,0 +1,10 @@
+models.User.findOne({ email: email })
+  .then(user => {
+    if (!password.verify(pass, user.get('password'))) {
+      return cb(null, false);
+    }
+
+    return cb(null, user);
+  })
+  .catch(models.Model.NotFoundError, err => cb(null, false))
+  .catch(err => cb(err));

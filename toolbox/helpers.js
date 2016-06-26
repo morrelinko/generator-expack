@@ -24,21 +24,32 @@ exports.ast = function (source, handler, opts) {
       tokens: true,
       range: true
     },
-    format: {
-      lineBreak: {
-        before: {
-          EndOfFile: 1,
-          FunctionExpressionClosingBrace: 1,
-        }
-      }
-    }
-  });
+    format: {}
+  }, opts);
 
   let tree = ast(source, opts.escode, opts.acorn);
 
   handler.call(handler, tree);
 
-  return esformatter.format(tree.toString(), opts.format);
+  return exports.formatJS(tree.toString(), opts.format);
+};
+
+exports.formatJS = function (data, opts) {
+  opts = assign({
+    lineBreak: {
+      before: {
+        EndOfFile: 1,
+        FunctionExpressionClosingBrace: 1,
+        ObjectExpressionClosingBrace: ">=1",
+        Property: ">=1"
+      },
+      after: {
+        ObjectExpressionOpeningBrace: ">=1"
+      }
+    }
+  }, opts);
+
+  return esformatter.format(data, opts);
 };
 
 exports.header = function (title) {
@@ -60,7 +71,15 @@ exports.wait = function (delay) {
 };
 
 exports.isRelationalDB = function (db) {
-  return ['mysql'].indexOf(db) !== -1;
+  return ['mysql', 'pg', 'sqlite'].indexOf(db) !== -1;
+};
+
+exports.getDBIdentifier = function (db) {
+  if (exports.isRelationalDB(db)) {
+    return 'sqldb';
+  } else if (['mongodb', 'couchdb'].indexOf(db) !== -1) {
+    return db;
+  }
 };
 
 exports.ensureExpack = function (gen, program) {

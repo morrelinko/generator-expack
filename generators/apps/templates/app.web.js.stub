@@ -1,17 +1,22 @@
 'use strict';
 <% if (answers.standalone) { %>
 const path = require('path');
-<% } %>const express = require('express');<% if (answers.standalone) { %>
+const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 const rp = require('routeplus');
 const middlewares = require('../middlewares');
-const bootstrap = require('../providers/bootstrap');<% } %>
-const rp = require('routeplus');
+const bootstrap = require('../providers/bootstrap');
 const config = require('../config');
-const routes = require('../routes/<%= name %>');
+const routes = require('../routes/<%= name %>');<% } %>
+<% if (!answers.standalone) { %>const path = require('path');
+const express = require('express');
+const rp = require('routeplus');
+const middlewares = require('../middlewares');
+const config = require('../config');
+const routes = require('../routes/<%= name %>');<% } %>
 
 <% if (answers.standalone) { %>module.exports = function (opts) {
   let app = express();

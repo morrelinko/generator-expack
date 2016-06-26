@@ -1,0 +1,32 @@
+'use strict';
+/**
+ * Auth middleware
+ *
+ * Ensures that a user is logged in
+ * before they can access specific resource
+ *
+ * Usage: as Express Middleware
+ * <code>
+ *  const auth = require('./middlewares/auth');
+ *  app.use(auth());
+ * </code>
+ *
+ * Usage: as RoutePlus Builder
+ * <code>
+ *  router.get('/dashboard', rp.builder(ctrl).auth().build());
+ * </code>
+ */
+
+const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
+const upg = require('../libs/urlpathgen');
+
+let middleware = module.exports = ensureLoggedIn;
+
+middleware.builder = function () {
+  this.use(middleware({
+    redirectTo: upg.route('auth'),
+    setReturnTo: true
+  }), 0);
+
+  return this;
+};

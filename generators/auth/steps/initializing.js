@@ -11,19 +11,17 @@ module.exports = function (program) {
     this.apps = Object.keys(config.get('apps')).filter(app => app.standalone !== false);
 
     if (this.databases.length === 0) {
-      this.log([
+      this.env.error([
         '\n', chalk.red('Error:'), 'No databases to use. Run ',
         chalk.cyan('yo expack:database'), 'to setup a database.'
       ].join(' '));
-      process.exit(1);
     }
 
     if (this.apps.length === 0) {
-      this.log([
+      this.env.error([
         chalk.red('Error:'), 'No apps to mount to. Run ',
         chalk.cyan('yo expack:apps <appname>'), 'to setup an app.'
       ].join(' '));
-      process.exit(1);
     }
 
     return program.helpers.wait(100);

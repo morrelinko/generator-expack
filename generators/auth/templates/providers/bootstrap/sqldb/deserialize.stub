@@ -1,0 +1,3 @@
+models.User.findById(id)
+  .then(user => cb(null, user))
+  .catch(err => cb(err));
